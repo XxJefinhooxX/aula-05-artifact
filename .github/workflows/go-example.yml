@@ -12,12 +12,29 @@ jobs:
       FILE_NAME: hello-server
 
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v2
+      # Step para realizar o checkout do repositório
+      - name: Check out the repo
+        uses: actions/checkout@v2
 
-    - name: Build for Linux
-      run: go build ${{ env.FILE_NAME }}.go
+      # Step para build do artefato Go para Linux
+      - name: Build for Linux
+        run: go build ${{ env.FILE_NAME }}.go
 
-    - name: Build for Windows
-      run: |
-        GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
+      # Step para upload do artefato gerado para Linux
+      - name: Upload artifact for linux
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux-hello-server
+          path: ./hello-server
+
+      # Step para build do artefato Go para Windows
+      - name: Build for Windows
+        run: |
+          GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
+
+      # Step para upload do artefato gerado para Windows
+      - name: Upload artifact for windows
+        uses: actions/upload-artifact@v1
+        with:
+          name: windows-hello-server
+          path: ./hello-server.exe
