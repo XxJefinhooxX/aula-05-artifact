@@ -17,6 +17,9 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Initialize Go module
+        run: go mod init aula-05-artifact  # Inicia o módulo Go
+
       - name: Build for Linux
         run: go build -o ${{ env.FILE_NAME }}.go
 
