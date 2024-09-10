@@ -68,9 +68,13 @@ jobs:
         with:
           name: linux-hello-server
 
-      # Step para executar o script run.sh
-      - name: Run script on Linux
-        run: source ./run.sh
+      # Step para tornar o artefato executável e executar o script run.sh
+      - name: Make artifact executable and run script
+        run: |
+          chmod +x ./hello-server.out
+          ./hello-server.out &  # Executa o servidor em background
+          sleep 5  # Aguarda o servidor iniciar
+          source ./run.sh  # Executa o script run.sh
 
   download-only-windows:
     runs-on: windows-latest
