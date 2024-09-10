@@ -24,7 +24,6 @@ jobs:
         run: |
           file hello-server.go  # Checa se o arquivo tem caracteres inválidos
           cat hello-server.go
-
       - name: Build for Linux
         run: go build -o ${{ env.FILE_NAME }}.go
 
@@ -34,20 +33,19 @@ jobs:
       - name: Upload artifact for linux
         uses: actions/upload-artifact@v4
         with:
-          name: linux-hello-server
+          name: linux
           path: ./hello-server
 
       - name: Build for Windows
         run: |
           GOOS=windows GOARCH=amd64 go build -o hello-server.exe ${{ env.FILE_NAME }}.go
-
       - name: List files after build (Windows)
         run: ls -l
 
       - name: Upload artifact for windows
         uses: actions/upload-artifact@v4
         with:
-          name: windows-hello-server
+          name: windows
           path: ./hello-server.exe
 
   download-and-run-linux:
@@ -62,13 +60,14 @@ jobs:
       - name: Download Linux Artifact
         uses: actions/download-artifact@v3
         with:
-          name: linux-hello-server
+          name: linux
 
       - name: Make run.sh executable
         run: chmod +x ./run.sh
 
       - name: Run script on Linux
-        run: ./run.sh
+        run: |
+          ./run.sh
 
   download-only-windows:
     name: Download Windows
@@ -82,4 +81,4 @@ jobs:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v3
         with:
-          name: windows-hello-server
+          name: windows
