@@ -28,7 +28,7 @@ jobs:
 
       # Step para build do artefato Go para Linux
       - name: Build for Linux
-        run: go build -o ${{ env.FILE_NAME }}.out ${{ env.FILE_NAME }}.go
+        run: go build -o hello-server.out hello-server.go
 
       # Step para rodar testes
       - name: Run tests
@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-hello-server
-          path: ./${{ env.FILE_NAME }}.out
+          path: ./hello-server.out
 
       # Step para build do artefato Go para Windows
       - name: Build for Windows
