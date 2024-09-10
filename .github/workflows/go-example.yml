@@ -20,6 +20,11 @@ jobs:
       - name: Initialize Go module
         run: go mod init aula-05-artifact  # Inicia o módulo Go
 
+      - name: Verify hello-server.go for corruption
+        run: |
+          file hello-server.go  # Checa se o arquivo tem caracteres inválidos
+          cat hello-server.go
+
       - name: Build for Linux
         run: go build -o ${{ env.FILE_NAME }}.go
 
