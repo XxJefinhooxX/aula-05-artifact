@@ -1,0 +1,23 @@
+name: Go Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      FILE_NAME: hello-server
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+
+    - name: Build for Linux
+      run: go build ${{ env.FILE_NAME }}.go
+
+    - name: Build for Windows
+      run: |
+        GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
