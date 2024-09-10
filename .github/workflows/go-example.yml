@@ -15,13 +15,13 @@ jobs:
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build for Linux
         run: go build ${{ env.FILE_NAME }}.go
 
       - name: Upload artifact for linux
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-hello-server
           path: ./hello-server
@@ -31,10 +31,10 @@ jobs:
           GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
 
       - name: Upload artifact for windows
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-hello-server
-          path: ./hello
+          path: ./hello-server.exe
 
   download-and-run-linux:
     name: Download and Run Linux
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download Linux Artifact
         uses: actions/download-artifact@v3
@@ -51,7 +51,9 @@ jobs:
           name: linux-hello-server
 
       - name: Run script on Linux
-        run: source ./run.sh
+        run: |
+          chmod +x ./run.sh  # Give executable permission if needed
+          ./run.sh  # Execute script
 
   download-only-windows:
     name: Download Windows
@@ -60,7 +62,7 @@ jobs:
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v3
