@@ -28,7 +28,7 @@ jobs:
 
       # Step para build do artefato Go para Linux
       - name: Build for Linux
-        run: go build -o hello-server.out hello-server.go
+        run: go build -o linux/hello-server hello-server.go
 
       # Step para rodar testes
       - name: Run tests
@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-hello-server
-          path: ./hello-server.out
+          path: linux/hello-server
 
       # Step para build do artefato Go para Windows
       - name: Build for Windows
@@ -68,11 +68,13 @@ jobs:
         with:
           name: linux-hello-server
 
-      # Step para tornar o artefato executável e executar o script run.sh
-      - name: Make artifact executable and run script
+      # Step para mover o artefato para o diretório correto e tornar o arquivo executável
+      - name: Prepare and run Linux artifact
         run: |
-          chmod +x ./hello-server.out
-          ./hello-server.out &  # Executa o servidor em background
+          mkdir -p linux
+          mv hello-server linux/hello-server
+          chmod +x ./linux/hello-server
+          ./linux/hello-server &  # Executa o servidor em background
           sleep 5  # Aguarda o servidor iniciar
           source ./run.sh  # Executa o script run.sh
 
