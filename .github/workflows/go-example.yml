@@ -22,7 +22,7 @@ jobs:
 
       # Step para upload do artefato gerado para Linux
       - name: Upload artifact for linux
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: linux-hello-server
           path: ./hello-server
@@ -34,7 +34,7 @@ jobs:
 
       # Step para upload do artefato gerado para Windows
       - name: Upload artifact for windows
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: windows-hello-server
-          path: ./hello-server.exe
+          path: ./hello
