@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '*/15 * * * 1-6'  # Executa a cada 15 minutos de segunda a sábado
+    - cron: '*/15 * * * 1-6'
 
 jobs:
   build-go:
@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-hello-server
-          path: ./hello-server  # Certifique-se de que o caminho está correto
+          path: ./hello-server
 
       - name: Build for Windows
         run: |
@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-hello-server
-          path: ./hello-server.exe  # Certifique-se de que o arquivo foi gerado
+          path: ./hello-server.exe
 
   download-and-run-linux:
     name: Download and Run Linux
@@ -56,10 +56,11 @@ jobs:
         with:
           name: linux-hello-server
 
+      - name: Make run.sh executable
+        run: chmod +x ./run.sh
+
       - name: Run script on Linux
-        run: |
-          chmod +x ./run.sh  # Dar permissão de execução, se necessário
-          ./run.sh  # Executa o script
+        run: ./run.sh
 
   download-only-windows:
     name: Download Windows
