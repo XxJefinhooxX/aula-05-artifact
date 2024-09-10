@@ -1,84 +1,40 @@
-name: Go Example Workflow
+name: Build and Test Go Application
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '*/15 * * * 1-6'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-go:
+  build:
     runs-on: ubuntu-latest
-    env:
-      FILE_NAME: hello-server
 
     steps:
-      - name: Check out the repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Initialize Go module
-        run: go mod init aula-05-artifact  # Inicia o módulo Go
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20' # Altere para a versão do Go que você está usando
 
-      - name: Verify hello-server.go for corruption
-        run: |
-          file hello-server.go  # Checa se o arquivo tem caracteres inválidos
-          cat hello-server.go
-      - name: Build for Linux
-        run: go build -o ${{ env.FILE_NAME }}.go
+      - name: Build Go application
+        run: go build -o hello-server hello-server.go
 
-      - name: List files after build (Linux)
-        run: ls -l
+      - name: Run tests
+        run: go test ./...
 
-      - name: Upload artifact for linux
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux
           path: ./hello-server
 
-      - name: Build for Windows
-        run: |
-          GOOS=windows GOARCH=amd64 go build -o hello-server.exe ${{ env.FILE_NAME }}.go
-      - name: List files after build (Windows)
-        run: ls -l
-
-      - name: Upload artifact for windows
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows
-          path: ./hello-server.exe
-
-  download-and-run-linux:
-    name: Download and Run Linux
-    runs-on: ubuntu-latest
-    needs: build-go
-
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-
-      - name: Download Linux Artifact
+      - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: linux
-
-      - name: Make run.sh executable
-        run: chmod +x ./run.sh
-
-      - name: Run script on Linux
-        run: |
-          ./run.sh
-
-  download-only-windows:
-    name: Download Windows
-    runs-on: windows-latest
-    needs: build-go
-
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-
-      - name: Download Windows Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: windows
+          path: ./hello-server
