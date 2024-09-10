@@ -1,40 +1,30 @@
-name: Go Example Workflow
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
+  download-and-run-linux:
+    name: Download and Run Linux
     runs-on: ubuntu-latest
-    env:
-      FILE_NAME: hello-server
+    needs: build
 
     steps:
-      # Step para realizar o checkout do repositório
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      # Step para build do artefato Go para Linux
-      - name: Build for Linux
-        run: go build ${{ env.FILE_NAME }}.go
-
-      # Step para upload do artefato gerado para Linux
-      - name: Upload artifact for linux
-        uses: actions/upload-artifact@v3
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v3
         with:
           name: linux-hello-server
-          path: ./hello-server
 
-      # Step para build do artefato Go para Windows
-      - name: Build for Windows
-        run: |
-          GOOS=windows GOARCH=amd64 go build ${{ env.FILE_NAME }}.go
+      - name: Run script on Linux
+        run: source ./run.sh
 
-      # Step para upload do artefato gerado para Windows
-      - name: Upload artifact for windows
-        uses: actions/upload-artifact@v3
+  download-only-windows:
+    name: Download Windows
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v3
         with:
           name: windows-hello-server
-          path: ./hello
