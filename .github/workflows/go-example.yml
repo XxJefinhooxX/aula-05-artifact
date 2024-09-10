@@ -8,7 +8,7 @@ on:
     - cron: '*/15 * * * 1-6'  # Executa a cada 15 minutos de segunda a sábado
 
 jobs:
-  build:
+  build-go:  # Renomeado de 'build' para 'build-go'
     runs-on: ubuntu-latest
     env:
       FILE_NAME: hello-server
@@ -39,7 +39,7 @@ jobs:
   download-and-run-linux:
     name: Download and Run Linux
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-go  # Dependência do 'build-go' (renomeado)
 
     steps:
       - name: Check out the repo
@@ -52,13 +52,13 @@ jobs:
 
       - name: Run script on Linux
         run: |
-          chmod +x ./run.sh  # Give executable permission if needed
-          ./run.sh  # Execute script
+          chmod +x ./run.sh  # Dar permissão de execução, se necessário
+          ./run.sh  # Executa o script
 
   download-only-windows:
     name: Download Windows
     runs-on: windows-latest
-    needs: build
+    needs: build-go  # Dependência do 'build-go' (renomeado)
 
     steps:
       - name: Check out the repo
